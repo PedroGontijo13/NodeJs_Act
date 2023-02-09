@@ -24,11 +24,34 @@ let agencyInputLogo = document.getElementById("agency-logo");
 let agencyInputSince = document.getElementById("agency-since");
 let agencyCreateButton = document.getElementById("agency-create-button");
 
+//actor selectors
+let fullname = document.getElementById('full-name')
+let age = document.getElementById('actor-age')
+let gender = document.getElementById('actor-gender')
+let createactorbutton = document.getElementById('actor-create-btn')
+
 if (token) {
   axios.defaults.headers.common["Authorization"] = `${token}`;
 }
 
 getMe();
+
+function createActor() {
+  let data = {
+    fullName: fullname.value,
+    age: age.value,
+    gender: gender.value
+  };
+
+  axios
+    .post("http://localhost:3001/api/actors/", data)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
 function getMe() {
   axios.get("http://localhost:3001/me").then((data) => {
@@ -117,33 +140,6 @@ function createAgency() {
     });
 }
 
-function createActor() {
-  // TODO: create actor
-  // please put your logic and call api here
-  // 123-123-1234
-  let phoneNumber = agencyInputPhone.value.replace(/-/g, "");
-
-  let data = {
-    fullName: agencyInputName.value,
-    location: agencyInputLocation.value,
-    phoneNumber: phoneNumber,
-    website: agencyInputWebsite.value,
-    email: agencyInputEmail.value,
-    bio: agencyInputBio.value,
-    logo: agencyInputLogo.value,
-    since: agencyInputSince.value,
-  };
-
-  axios
-    .post("http://localhost:3001/api/actors/", data)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
-
 roleButtonGroup.forEach((item) => {
   item.addEventListener("click", () => {
     role = item.value;
@@ -179,3 +175,8 @@ agencyCreateButton.addEventListener("click", () => {
 // TODO: create actor
 // you will add event listener for create actor button
 // and call createActor function
+createactorbutton.addEventListener('click', () => {
+  createActor()
+  console.log('Created')
+  window.location.reload();
+})
